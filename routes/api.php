@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Atu\ApiAuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -13,7 +14,13 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::get('/api/user', function (){});
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::prefix('/')->group(function () {
+    Route::post('/login', [ApiAuthController::class, 'login'])->name('login.api');
+    Route::post('/register', [ApiAuthController::class, 'register'])->name('register.api');
+})->middleware(['cors', 'json.response']);
+
+Route::middleware('auth:api')->group(function () {
+    Route::post('/logout', [ApiAuthController::class, 'logout'])->name('logout.api');
 });

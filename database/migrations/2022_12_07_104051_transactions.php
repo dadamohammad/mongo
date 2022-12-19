@@ -21,9 +21,9 @@ return new class extends Migration
                 ->onDelete('cascade');
         $table->string('success');
         $table->string('bank');
-        $table->string('tracking_id');
-        $table->string('support_number');
-        $table->string('bank_tracking_id');
+        $table->string('code');
+        $table->string('tracking_code');
+        $table->string('bank_tracking');
         $table->string('amount');
         $table->softDeletes();
         $table->timestamps();
