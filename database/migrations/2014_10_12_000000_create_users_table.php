@@ -13,13 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::enableForeignKeyConstraints();
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('parent_id');
             $table->string('first_name');
             $table->string('last_name');
-            $table->string('mobile',13);
+            $table->string('phone',13)->nullable();
             $table->string('username')->unique();
             $table->string('email')->unique()->nullable();
             $table->timestamp('email_verified_at')->nullable();

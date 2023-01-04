@@ -1,6 +1,9 @@
 <?php
 
-use App\Http\Controllers\Atu\ApiAuthController;
+use App\Http\Controllers\Api\v1\LoginController;
+use App\Http\Controllers\Api\v1\RegisterController;
+use App\Http\Controllers\Auth\ApiAuthController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,13 +17,21 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::get('/api/user', function (){});
 
-Route::prefix('/')->group(function () {
-    Route::post('/login', [ApiAuthController::class, 'login'])->name('login.api');
-    Route::post('/register', [ApiAuthController::class, 'register'])->name('register.api');
-})->middleware(['cors', 'json.response']);
+Route::get('/test', function(Request $request) {
+    \Illuminate\Support\Facades\Validator::validate($request->all(), [
+        'mobile' => 'required|unique:users,mobile|size:11',
+    ]);
 
-Route::middleware('auth:api')->group(function () {
-    Route::post('/logout', [ApiAuthController::class, 'logout'])->name('logout.api');
+    $mobile = $request->mobile;
+    return "کد به $mobile ارسال شد";
+
+    $user = \App\Models\User::whereFirst('username', $request->username);
+    return $user();
 });
+
+Route::post('/register', [RegisterController::class, "register"]);
+Route::post('verify_mobile', [RegisterController::class, "verfiy"]);
+Route::post('/login', [LoginController::class, "login"]);
+
+
