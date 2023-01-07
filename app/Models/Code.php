@@ -3,16 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Jenssegers\Mongodb\Eloquent\Model;
 
 class Code extends Model
 {
     use HasFactory;
 
-    protected $table = 'codes';
-
     protected $fillable = [
-        'code',
+        'rand_code',
         'user',
         'mobile',
         'verified_at'

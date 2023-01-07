@@ -32,7 +32,7 @@ class SmsIr extends Notification
      */
     public function via($notifiable)
     {
-        return [SmsChannel::class,'mail'];
+        return [SmsChannel::class];
     }
 
     /**

@@ -3,20 +3,22 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
+use App\Models\Code;
 use App\Models\Shop;
 use App\Models\User;
 use App\Notifications\SmsIr;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Notification;
-use League\CommonMark\Extension\CommonMark\Node\Inline\Code;
+
 
 
 class RegisterController extends Controller
 {
 
-    public function register(Request $request, User $user) {
+    public function register(Request $request) {
         \Illuminate\Support\Facades\Validator::validate($request->all(), [
             'phone' => 'required|unique:users,phone|size:11',
         ]);
@@ -24,21 +26,27 @@ class RegisterController extends Controller
 
         $phone = $request->phone;
 
-        $code = rand('1000', '9999');
+        $randCode = rand('1000', '9999');
 
 
-        $codes= Code::create([
-            'user' => $phone,
-            'code' => $code
+        $code = Code::create([
+            'mobile' => $phone,
+            'rand_code' => $randCode
         ]);
 
-        $codes->save();
+        $code->save();
 
 //        event(new Code($phone, $code));
 
 //        $user = auth()->user();
 //        $code = Code::find(1);
-        Notification::send($user ,new SmsIr($code));
+        Http::post('https://rest.payamak-panel.com/api/SendSMS/SendSMS', [
+            'username' => '09122710574',
+            'password' => 'b4cac3e4-a242-4606-ab12-e7e9de96851a',
+            'from'     => '50004001710574',
+            'to'       => $phone,
+            'text'     => $randCode
+        ]);
 
         return "کد به $phone ارسال شد";
     }
@@ -49,23 +57,22 @@ class RegisterController extends Controller
             'code' => 'required|size: 4',
         ]);
 
-        $code = $request->code;
         $phone = $request->phone;
+        $code = $request->code;
 
         $code = Code::where([
-            ['code', $code],
-            ['phone', $phone]
+            ['mobile', $phone],
+            ['rand_code', intval($code)]
         ])->first();
 
-        $currentTime = \Carbon\Carbon::now(); // 2023-01-01
-        $codeSendTime = $code->created_at;
-        $diff = $currentTime->diff($codeSendTime)->i;
+        if ($code) {
+            $currentTime = \Carbon\Carbon::now(); // 2023-01-01
+            $codeSendTime = $code->created_at;
+            $diff = $currentTime->diff($codeSendTime)->i;
 
-        if ($diff < 2) {
-            User::create([
-                'phone' => $phone,
-            ]);
-            return "create";
+            if ($diff < 2) {
+                return 'کد با موفقیت ثبت شد';
+            }
         }
         return "not create";
     }

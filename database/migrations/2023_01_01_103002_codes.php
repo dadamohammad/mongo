@@ -16,10 +16,10 @@ return new class extends Migration
         Schema::create('codes', function (Blueprint $table)
         {
             $table->id();
-            $table->string('code');
-            $table->string('user');
+            $table->string('rand_code');
+            $table->string('user')->nullable();
             $table->string('mobile');
-            $table->string('verified_at');
+            $table->string('verified_at')->nullable();
             $table->timestamps();
         });
     }

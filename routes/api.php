@@ -31,7 +31,7 @@ Route::get('/test', function(Request $request) {
 });
 
 Route::post('/register', [RegisterController::class, "register"]);
-Route::post('verify_mobile', [RegisterController::class, "verfiy"]);
+Route::post('verify_mobile', [RegisterController::class, "verify"]);
 Route::post('/login', [LoginController::class, "login"]);
 
 
