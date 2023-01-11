@@ -16,6 +16,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
+    $test = 100;
+
+    if ($acc = $test === 100) {
+        $acc += 120;
+        return $acc;
+    }
     return Code::create([
         'phone' => "test",
         'rand_code' => "test"

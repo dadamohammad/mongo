@@ -10,6 +10,7 @@ use App\Notifications\SmsIr;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Notification;
 
@@ -34,7 +35,6 @@ class RegisterController extends Controller
             'rand_code' => $randCode
         ]);
 
-        $code->save();
 
 //        event(new Code($phone, $code));
 
@@ -51,7 +51,7 @@ class RegisterController extends Controller
         return "کد به $phone ارسال شد";
     }
 
-    public function verify(Request $request) {
+    public function registerverify(Request $request) {
         \Illuminate\Support\Facades\Validator::validate($request->all(), [
             'phone' => 'required|unique: users,phone|size: 11',
             'code' => 'required|size: 4',
@@ -70,10 +70,15 @@ class RegisterController extends Controller
             $codeSendTime = $code->created_at;
             $diff = $currentTime->diff($codeSendTime)->i;
 
+
             if ($diff < 2) {
-                return 'کد با موفقیت ثبت شد';
+                $user = User::create([
+                    'mobile' => $phone
+                ]);
+                return 'create';
             }
-        }
-        return "not create";
+        }return "not create";
+
+
     }
 }

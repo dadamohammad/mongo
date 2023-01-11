@@ -15,16 +15,16 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('parent_id');
-            $table->string('first_name');
-            $table->string('last_name');
-            $table->string('phone',13)->nullable();
-            $table->string('username')->unique();
-            $table->string('email')->unique()->nullable();
+            $table->string('first_name')->nullable();
+            $table->string('last_name')->nullable();
+            $table->string('mobile',13);
+            $table->string('rand_code',4)->nullable();
+            $table->string('username')->nullable();
+            $table->string('email')->nullable();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->tinyInteger('status')->default(1);
-            $table->string('type',100)->default('market');
+            $table->string('password')->nullable();
+            $table->tinyInteger('status')->default(1)->nullable();
+            $table->string('type',100)->default('market')->nullable();
             $table->string('activity')->nullable();
             $table->json('data')->nullable()->default(null)->comment('(DC2Type:json_array)');
             $table->rememberToken();

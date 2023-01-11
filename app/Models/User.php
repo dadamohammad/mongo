@@ -22,7 +22,8 @@ class User extends Authenticatable
     protected $fillable = [
         'first_name',
         'last_name',
-        'phone',
+        'mobile',
+        'rand_code',
         'username',
         'email',
         'password',
@@ -57,10 +58,7 @@ class User extends Authenticatable
      * @param  \Illuminate\Notifications\Notification  $notification
      * @return string
      */
-    public function routeNotificationForVonage($notification)
-    {
-        return $this->phone;
-    }
+
 
 
 }
